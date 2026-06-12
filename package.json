@@ -1,0 +1,12 @@
+{
+  "name": "The Ledger – Belle's Lounge recipe book",
+  "description": "A collection of prep ingredient recipes and par tracking",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "changelog": "git-cliff --bump --unreleased --prepend CHANGELOG.md --sort newest"
+  },
+  "author": "Kyle Apsey",
+  "license": "MIT"
+}

@@ -7,7 +7,7 @@ export default {
       items: [],
       loading: true,
       error: '',
-      loggingItemId: null, // item being marked done inline (no-recipe items)
+      loggingItemId: null,
     }
   },
 
@@ -16,15 +16,32 @@ export default {
   },
 
   computed: {
+    hasSession() {
+      return this.items.some(i => i.stock_quantity !== null)
+    },
+
     pending() {
+      if (this.hasSession) {
+        return this.items.filter(i => i.needs_prep && !i.batched_today)
+      }
       return this.items.filter(i => !i.batched_today)
     },
+
     done() {
       return this.items.filter(i => i.batched_today)
     },
+
     allDone() {
-      return this.items.length > 0 && this.pending.length === 0
+      if (this.items.length === 0) return false
+      return this.pending.length === 0
     },
+
+    completionText() {
+      const count = this.done.length
+      if (count === 0 && this.hasSession) return 'All items at par — nothing to prep today'
+      return `All done — ${count} batch${count !== 1 ? 'es' : ''} logged today`
+    },
+
     staffName() {
       return getSession()?.name ?? ''
     },
@@ -44,7 +61,7 @@ export default {
     },
 
     openRecipe(item) {
-      this.$router.push(`/recipes/${item.recipe.id}?item_id=${item.id}`)
+      this.$router.push(`/recipes/${item.recipe.id}?item_id=${item.id}&from=checklist`)
     },
 
     async markDone(item) {
@@ -57,7 +74,7 @@ export default {
           body: {
             id: crypto.randomUUID(),
             item_id: item.id,
-            yield_liters: 1,  // garnishes/juices have no recipe yield; use 1 as a unit
+            yield_liters: 1,
           },
         })
         item.batched_today = true
@@ -66,6 +83,13 @@ export default {
       } finally {
         this.loggingItemId = null
       }
+    },
+
+    formatDeficit(item) {
+      if (!item.deficit || item.deficit <= 0) return ''
+      const val = parseFloat(item.deficit)
+      const nice = val % 1 === 0 ? val : val.toFixed(1)
+      return `${nice} ${item.stock_unit} short`
     },
   },
 }
@@ -92,9 +116,17 @@ export default {
 
     <template v-else>
 
+      <!-- Stock check prompt (no session today) -->
+      <div v-if="!hasSession && !allDone" class="stock-banner">
+        <div class="stock-banner__body">
+          <span class="stock-banner__text">Check stock first for a smarter prep list.</span>
+          <NuxtLink to="/stock-check" class="stock-banner__link">Check Stock →</NuxtLink>
+        </div>
+      </div>
+
       <!-- All done banner -->
       <div v-if="allDone" class="checklist-banner">
-        All done for today
+        {{ completionText }}
       </div>
 
       <!-- Pending items -->
@@ -105,19 +137,23 @@ export default {
         <ul class="item-list">
           <li v-for="item in pending" :key="item.id" class="item-card item-card--pending">
 
-            <!-- Has recipe → tap to open recipe page -->
             <button v-if="item.recipe" class="item-card__body" @click="openRecipe(item)">
               <span class="item-card__status item-card__status--pending" aria-label="Needs prep" />
-              <span class="item-card__name">{{ item.name }}</span>
+              <span class="item-card__info">
+                <span class="item-card__name">{{ item.name }}</span>
+                <span v-if="formatDeficit(item)" class="item-card__deficit">{{ formatDeficit(item) }}</span>
+              </span>
               <svg class="item-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M9 18l6-6-6-6" />
               </svg>
             </button>
 
-            <!-- No recipe → inline mark-done button -->
             <div v-else class="item-card__body item-card__body--no-recipe">
               <span class="item-card__status item-card__status--pending" aria-label="Needs prep" />
-              <span class="item-card__name">{{ item.name }}</span>
+              <span class="item-card__info">
+                <span class="item-card__name">{{ item.name }}</span>
+                <span v-if="formatDeficit(item)" class="item-card__deficit">{{ formatDeficit(item) }}</span>
+              </span>
               <button
                 class="item-card__done-btn"
                 :disabled="loggingItemId === item.id"
@@ -182,14 +218,8 @@ export default {
     padding: var(--space-2);
     margin-top: -2px;
 
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    &:disabled {
-      opacity: 0.4;
-    }
+    svg { width: 20px; height: 20px; }
+    &:disabled { opacity: 0.4; }
   }
 
   &__state {
@@ -197,9 +227,37 @@ export default {
     color: var(--color-text-muted);
     padding: var(--space-12) 0;
 
-    &--error {
-      color: var(--color-danger);
-    }
+    &--error { color: var(--color-danger); }
+  }
+}
+
+// Stock check prompt banner
+.stock-banner {
+  margin-bottom: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-base);
+  padding: var(--space-3) var(--space-4);
+
+  &__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  &__text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  &__link {
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
   }
 }
 
@@ -237,9 +295,7 @@ export default {
     letter-spacing: 0;
   }
 
-  &--done {
-    opacity: 0.55;
-  }
+  &--done { opacity: 0.55; }
 }
 
 .item-list {
@@ -255,16 +311,12 @@ export default {
   border-radius: var(--radius-base);
   overflow: hidden;
 
-  &--pending {
-    border-color: var(--color-border);
-  }
-
   &__body {
     display: flex;
     align-items: center;
     gap: var(--space-3);
     width: 100%;
-    padding: var(--space-4) var(--space-4);
+    padding: var(--space-4);
     background: none;
     border: none;
     color: var(--color-text);
@@ -272,16 +324,11 @@ export default {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
-    &:active {
-      background: var(--color-surface-alt);
-    }
+    &:active { background: var(--color-surface-alt); }
 
     &--no-recipe {
       cursor: default;
-
-      &:active {
-        background: none;
-      }
+      &:active { background: none; }
     }
   }
 
@@ -291,16 +338,13 @@ export default {
     height: 18px;
     border-radius: 50%;
 
-    &--pending {
-      border: 2px solid var(--color-border);
-    }
+    &--pending { border: 2px solid var(--color-border); }
 
     &--done {
       background: var(--color-success);
       border: 2px solid var(--color-success);
       position: relative;
 
-      // Checkmark
       &::after {
         content: '';
         position: absolute;
@@ -312,9 +356,24 @@ export default {
     }
   }
 
-  &__name {
+  &__info {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
     font-size: var(--text-base);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__deficit {
+    font-size: var(--text-xs);
+    color: var(--color-warning);
   }
 
   &__arrow {
@@ -342,9 +401,7 @@ export default {
       border-color: var(--color-accent);
     }
 
-    &:disabled {
-      opacity: 0.5;
-    }
+    &:disabled { opacity: 0.5; }
   }
 }
 </style>

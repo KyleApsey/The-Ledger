@@ -7,11 +7,21 @@ export default {
       recipe: null,
       loading: true,
       error: '',
+      // Yield scaling
+      scaleFactor: 1,
+      // Batch logging
       showConfirm: false,
       notes: '',
       logging: false,
       logError: '',
       logSuccess: false,
+      // Waste logging
+      showWasteDrawer: false,
+      wasteQty: '',
+      wasteReason: '',
+      loggingWaste: false,
+      wasteError: '',
+      wasteLogged: false,
     }
   },
 
@@ -23,8 +33,41 @@ export default {
     itemId() {
       return this.$route.query.item_id || this.recipe?.item_id || null
     },
+
+    backPath() {
+      return this.$route.query.from === 'checklist' ? '/checklist' : '/recipes'
+    },
+
+    backLabel() {
+      return this.$route.query.from === 'checklist' ? '← Prep list' : '← Recipes'
+    },
+
     canLog() {
-      return !!this.itemId && !this.logSuccess
+      return !!this.itemId && !this.logSuccess && !this.wasteLogged
+    },
+
+    scaledYield() {
+      if (!this.recipe) return 0
+      return Math.round(this.recipe.base_yield_liters * this.scaleFactor * 100) / 100
+    },
+
+    scaledIngredients() {
+      if (!this.recipe) return []
+      return this.recipe.recipe_ingredients.map(ing => ({
+        ...ing,
+        displayQty: this.formatQuantity(ing.quantity * this.scaleFactor),
+      }))
+    },
+
+    lastBatchLabel() {
+      const b = this.recipe?.last_batch
+      if (!b) return null
+      const scale = b.scale_factor && b.scale_factor !== 1 ? `${b.scale_factor}× ` : ''
+      const date = new Date(b.logged_at).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', timeZone: 'America/Detroit',
+      })
+      const who = b.staff?.name ?? 'someone'
+      return `${scale}on ${date} by ${who}`
     },
   },
 
@@ -44,8 +87,15 @@ export default {
     },
 
     formatQuantity(qty) {
-      // Drop trailing zeros: 1.50 → 1.5, 1.00 → 1
-      return parseFloat(qty).toString()
+      const n = parseFloat(qty)
+      if (n === Math.floor(n)) return String(Math.floor(n))
+      return parseFloat(n.toFixed(3)).toString()
+    },
+
+    stepScale(delta) {
+      const next = Math.round((this.scaleFactor + delta) * 10) / 10
+      if (next < 0.5) return
+      this.scaleFactor = next
     },
 
     async logBatch() {
@@ -60,17 +110,45 @@ export default {
             id: crypto.randomUUID(),
             item_id: this.itemId,
             recipe_id: this.recipe.id,
-            yield_liters: this.recipe.base_yield_liters,
+            yield_liters: this.scaledYield,
+            scale_factor: this.scaleFactor,
             notes: this.notes.trim() || null,
           },
         })
         this.logSuccess = true
         this.showConfirm = false
-        setTimeout(() => this.$router.replace('/checklist'), 1000)
       } catch {
         this.logError = 'Could not log batch. Try again.'
       } finally {
         this.logging = false
+      }
+    },
+
+    async logWaste() {
+      if (this.loggingWaste) return
+      const qty = parseFloat(this.wasteQty)
+      if (isNaN(qty) || qty <= 0) return
+      this.loggingWaste = true
+      this.wasteError = ''
+      try {
+        await $fetch('/api/waste', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: {
+            id: crypto.randomUUID(),
+            item_id: this.itemId,
+            quantity: qty,
+            unit: 'liters',
+            reason: this.wasteReason.trim() || null,
+          },
+        })
+        this.wasteLogged = true
+        this.showWasteDrawer = false
+        setTimeout(() => this.$router.replace(this.backPath), 1200)
+      } catch {
+        this.wasteError = 'Could not log waste. Try again.'
+      } finally {
+        this.loggingWaste = false
       }
     },
   },
@@ -81,8 +159,8 @@ export default {
   <div class="recipe-page">
 
     <header class="recipe-page__header">
-      <button class="recipe-page__back" @click="$router.replace('/checklist')">
-        ← Prep list
+      <button class="recipe-page__back" @click="$router.replace(backPath)">
+        {{ backLabel }}
       </button>
     </header>
 
@@ -93,22 +171,39 @@ export default {
 
       <h1 class="recipe-page__title">{{ recipe.name }}</h1>
 
-      <div class="recipe-page__meta">
-        <span class="recipe-page__yield">Makes {{ recipe.base_yield_liters }} L</span>
+      <!-- Yield history (E3) -->
+      <p v-if="lastBatchLabel" class="recipe-page__last-batch">Last made: {{ lastBatchLabel }}</p>
+
+      <!-- Yield scaling control -->
+      <div class="recipe-page__yield-row">
+        <span class="recipe-page__yield-label">Makes</span>
+        <button
+          class="recipe-page__step-btn"
+          :disabled="scaleFactor <= 0.5"
+          aria-label="Decrease yield"
+          @click="stepScale(-0.5)"
+        >−</button>
+        <span class="recipe-page__scale-badge">{{ scaleFactor }}×</span>
+        <button
+          class="recipe-page__step-btn"
+          aria-label="Increase yield"
+          @click="stepScale(0.5)"
+        >+</button>
+        <span class="recipe-page__yield-total">{{ scaledYield }} L</span>
       </div>
 
       <p v-if="recipe.notes" class="recipe-page__notes">{{ recipe.notes }}</p>
 
-      <!-- Ingredients -->
+      <!-- Ingredients (scaled) -->
       <section class="recipe-section">
         <h2 class="recipe-section__heading">Ingredients</h2>
         <ul class="ingredient-list">
           <li
-            v-for="ing in recipe.recipe_ingredients"
+            v-for="ing in scaledIngredients"
             :key="ing.id"
             class="ingredient-list__item"
           >
-            <span class="ingredient-list__qty">{{ formatQuantity(ing.quantity) }} {{ ing.unit }}</span>
+            <span class="ingredient-list__qty">{{ ing.displayQty }} {{ ing.unit }}</span>
             <span class="ingredient-list__name">{{ ing.name }}</span>
           </li>
         </ul>
@@ -130,21 +225,63 @@ export default {
 
     </template>
 
-    <!-- Log batch CTA (sticky footer) -->
+    <!-- Log batch footer (sticky) -->
     <div v-if="!loading && recipe" class="recipe-page__footer">
-      <div v-if="logSuccess" class="recipe-page__success">Batch logged!</div>
-      <button
-        v-else-if="!showConfirm"
-        class="recipe-page__log-btn"
-        :disabled="!canLog"
-        @click="showConfirm = true"
-      >
-        Log This Batch
-      </button>
+
+      <!-- Waste logged success -->
+      <div v-if="wasteLogged" class="recipe-page__success">Waste logged. Heading back…</div>
+
+      <!-- Batch logged success + options -->
+      <template v-else-if="logSuccess">
+        <div class="recipe-page__success">Batch logged!</div>
+        <div class="recipe-page__post-log">
+          <button v-if="itemId" class="recipe-page__waste-link" @click="showWasteDrawer = true">
+            Log waste instead
+          </button>
+          <NuxtLink :to="backPath" class="recipe-page__done-link">Done →</NuxtLink>
+        </div>
+      </template>
+
+      <!-- Waste log drawer -->
+      <div v-else-if="showWasteDrawer" class="waste-drawer">
+        <p class="waste-drawer__label">Log waste for {{ recipe.name }}</p>
+        <div class="waste-drawer__row">
+          <input
+            v-model="wasteQty"
+            class="waste-drawer__qty"
+            type="number"
+            min="0.1"
+            step="0.5"
+            inputmode="decimal"
+            placeholder="0.0"
+          />
+          <span class="waste-drawer__unit">L</span>
+        </div>
+        <input
+          v-model="wasteReason"
+          class="waste-drawer__reason"
+          type="text"
+          placeholder="Reason (optional)"
+          maxlength="200"
+        />
+        <p v-if="wasteError" class="waste-drawer__error">{{ wasteError }}</p>
+        <div class="waste-drawer__actions">
+          <button class="waste-drawer__cancel" :disabled="loggingWaste" @click="showWasteDrawer = false">
+            Cancel
+          </button>
+          <button
+            class="waste-drawer__submit"
+            :disabled="loggingWaste || !wasteQty || parseFloat(wasteQty) <= 0"
+            @click="logWaste"
+          >
+            {{ loggingWaste ? 'Logging…' : 'Log Waste' }}
+          </button>
+        </div>
+      </div>
 
       <!-- Confirm drawer -->
-      <div v-else class="log-confirm">
-        <p class="log-confirm__label">Log 1 batch of {{ recipe.name }}?</p>
+      <div v-else-if="showConfirm" class="log-confirm">
+        <p class="log-confirm__label">Log {{ scaledYield }} L of {{ recipe.name }}?</p>
         <textarea
           v-model="notes"
           class="log-confirm__notes"
@@ -161,6 +298,17 @@ export default {
           </button>
         </div>
       </div>
+
+      <!-- Primary CTA -->
+      <button
+        v-else
+        class="recipe-page__log-btn"
+        :disabled="!canLog"
+        @click="showConfirm = true"
+      >
+        Log {{ scaledYield }} L
+      </button>
+
     </div>
 
   </div>
@@ -170,12 +318,9 @@ export default {
 .recipe-page {
   padding: var(--space-4) var(--space-6);
   padding-top: max(var(--space-4), env(safe-area-inset-top));
-  // Extra bottom padding for the sticky footer
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  padding-bottom: calc(140px + env(safe-area-inset-bottom));
 
-  &__header {
-    margin-bottom: var(--space-4);
-  }
+  &__header { margin-bottom: var(--space-4); }
 
   &__back {
     background: none;
@@ -193,17 +338,55 @@ export default {
     margin-bottom: var(--space-2);
   }
 
-  &__meta {
+  &__last-batch {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  &__yield-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
     margin-bottom: var(--space-4);
   }
 
-  &__yield {
-    display: inline-block;
-    background: var(--color-surface-alt);
-    border-radius: var(--radius-full);
+  &__yield-label {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    padding: var(--space-1) var(--space-3);
+    margin-right: var(--space-1);
+  }
+
+  &__step-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-lg);
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active:not(:disabled) { background: var(--color-surface-alt); }
+    &:disabled { opacity: 0.35; }
+  }
+
+  &__scale-badge {
+    min-width: 44px;
+    text-align: center;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  &__yield-total {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-left: var(--space-1);
   }
 
   &__notes {
@@ -218,10 +401,7 @@ export default {
     text-align: center;
     color: var(--color-text-muted);
     padding: var(--space-12) 0;
-
-    &--error {
-      color: var(--color-danger);
-    }
+    &--error { color: var(--color-danger); }
   }
 
   &__footer {
@@ -247,26 +427,44 @@ export default {
     cursor: pointer;
     transition: opacity var(--transition-fast);
 
-    &:active {
-      opacity: 0.85;
-    }
-
-    &:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
+    &:active { opacity: 0.85; }
+    &:disabled { opacity: 0.4; cursor: default; }
   }
 
   &__success {
     text-align: center;
     color: var(--color-success);
     font-weight: 600;
-    padding: var(--space-4);
+    padding: var(--space-3) 0 var(--space-2);
+  }
+
+  &__post-log {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-1);
+  }
+
+  &__waste-link {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline dotted;
+  }
+
+  &__done-link {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
   }
 }
 
-// ---- Recipe sections ----
-
+// Recipe content sections
 .recipe-section {
   margin-bottom: var(--space-8);
 
@@ -302,9 +500,7 @@ export default {
     min-width: 80px;
   }
 
-  &__name {
-    color: var(--color-text);
-  }
+  &__name { color: var(--color-text); }
 }
 
 .step-list {
@@ -339,8 +535,7 @@ export default {
   }
 }
 
-// ---- Log confirm drawer ----
-
+// Confirm drawer
 .log-confirm {
   display: flex;
   flex-direction: column;
@@ -363,14 +558,8 @@ export default {
     resize: none;
     width: 100%;
 
-    &::placeholder {
-      color: var(--color-text-muted);
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--color-accent);
-    }
+    &::placeholder { color: var(--color-text-muted); }
+    &:focus { outline: none; border-color: var(--color-accent); }
   }
 
   &__error {
@@ -394,9 +583,7 @@ export default {
     font-size: var(--text-base);
     cursor: pointer;
 
-    &:active:not(:disabled) {
-      background: var(--color-surface-alt);
-    }
+    &:active:not(:disabled) { background: var(--color-surface-alt); }
   }
 
   &__submit {
@@ -410,13 +597,97 @@ export default {
     cursor: pointer;
     transition: opacity var(--transition-fast);
 
-    &:active:not(:disabled) {
-      opacity: 0.85;
-    }
+    &:active:not(:disabled) { opacity: 0.85; }
+    &:disabled { opacity: 0.5; }
+  }
+}
 
-    &:disabled {
-      opacity: 0.5;
-    }
+// Waste log drawer
+.waste-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  &__label {
+    font-size: var(--text-base);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__qty {
+    flex: 1;
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    color: var(--color-text);
+    font-size: var(--text-base);
+
+    &:focus { outline: none; border-color: var(--color-accent); }
+  }
+
+  &__unit {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    min-width: 20px;
+  }
+
+  &__reason {
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    width: 100%;
+
+    &::placeholder { color: var(--color-text-muted); }
+    &:focus { outline: none; border-color: var(--color-accent); }
+  }
+
+  &__error {
+    color: var(--color-danger);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-2);
+  }
+
+  &__cancel {
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    color: var(--color-text);
+    font-size: var(--text-base);
+    cursor: pointer;
+
+    &:active:not(:disabled) { background: var(--color-surface-alt); }
+  }
+
+  &__submit {
+    padding: var(--space-3);
+    background: var(--color-danger);
+    border: none;
+    border-radius: var(--radius-base);
+    color: #fff;
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:active:not(:disabled) { opacity: 0.85; }
+    &:disabled { opacity: 0.5; }
   }
 }
 </style>

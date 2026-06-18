@@ -79,9 +79,10 @@ export default {
 
 <template>
   <div class="recipes-manage">
-    <header class="admin-header">
+    <header class="admin-header recipes-manage__header">
       <button class="admin-header__back" @click="$router.replace('/manage')">← Manage</button>
       <h1 class="admin-header__title">Recipes</h1>
+      <NuxtLink to="/manage/recipes/new" class="recipes-manage__new-btn">+ New</NuxtLink>
     </header>
 
     <div v-if="loading" class="admin-state">Loading…</div>
@@ -143,6 +144,26 @@ export default {
   padding: var(--space-6);
   padding-top: max(var(--space-6), env(safe-area-inset-top));
   padding-bottom: calc(var(--nav-height) + var(--space-6) + env(safe-area-inset-bottom));
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__new-btn {
+    margin-left: auto;
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-accent);
+    border-radius: var(--radius-base);
+    color: #000;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active { opacity: 0.85; }
+  }
 }
 
 .recipe-manage-section {

@@ -318,7 +318,7 @@ export default {
 .recipe-page {
   padding: var(--space-4) var(--space-6);
   padding-top: max(var(--space-4), env(safe-area-inset-top));
-  padding-bottom: calc(140px + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 240px);
 
   &__header { margin-bottom: var(--space-4); }
 
@@ -406,11 +406,10 @@ export default {
 
   &__footer {
     position: fixed;
-    bottom: 0;
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
     left: 0;
     right: 0;
     padding: var(--space-4) var(--space-6);
-    padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
     background: var(--color-bg);
     border-top: 1px solid var(--color-border);
   }

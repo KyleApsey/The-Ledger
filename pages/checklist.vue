@@ -8,6 +8,7 @@ export default {
       loading: true,
       error: '',
       loggingItemId: null,
+      undoItemIds: new Set(),
     }
   },
 
@@ -82,6 +83,24 @@ export default {
         this.error = 'Could not log batch. Try again.'
       } finally {
         this.loggingItemId = null
+      }
+    },
+
+    async undo(item) {
+      if (this.undoItemIds.has(item.id)) return
+      this.undoItemIds = new Set([...this.undoItemIds, item.id])
+      try {
+        const res = await $fetch(`/api/batches/today?item_id=${item.id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        })
+        item.batched_today = res.batched_today
+      } catch {
+        this.error = 'Could not undo. Try again.'
+      } finally {
+        const next = new Set(this.undoItemIds)
+        next.delete(item.id)
+        this.undoItemIds = next
       }
     },
 
@@ -174,9 +193,14 @@ export default {
         </h2>
         <ul class="item-list item-list--done">
           <li v-for="item in done" :key="item.id" class="item-card item-card--done">
-            <div class="item-card__body">
+            <div class="item-card__body item-card__body--no-recipe">
               <span class="item-card__status item-card__status--done" aria-label="Done" />
               <span class="item-card__name">{{ item.name }}</span>
+              <button
+                class="item-card__undo-btn"
+                :disabled="undoItemIds.has(item.id)"
+                @click="undo(item)"
+              >{{ undoItemIds.has(item.id) ? '…' : '↩' }}</button>
             </div>
           </li>
         </ul>
@@ -401,6 +425,22 @@ export default {
       border-color: var(--color-accent);
     }
 
+    &:disabled { opacity: 0.5; }
+  }
+
+  &__undo-btn {
+    flex-shrink: 0;
+    padding: var(--space-2) var(--space-3);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    min-width: 36px;
+    text-align: center;
+
+    &:active:not(:disabled) { background: var(--color-surface-alt); }
     &:disabled { opacity: 0.5; }
   }
 }

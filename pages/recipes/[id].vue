@@ -300,14 +300,16 @@ export default {
       </div>
 
       <!-- Primary CTA -->
-      <button
-        v-else
-        class="recipe-page__log-btn"
-        :disabled="!canLog"
-        @click="showConfirm = true"
-      >
-        Log {{ scaledYield }} L
-      </button>
+      <template v-else>
+        <button
+          class="recipe-page__log-btn"
+          :disabled="!canLog"
+          @click="showConfirm = true"
+        >
+          Log {{ scaledYield }} L
+        </button>
+        <p v-if="!itemId" class="recipe-page__log-hint">Start from your prep list to log a batch.</p>
+      </template>
 
     </div>
 
@@ -428,6 +430,13 @@ export default {
 
     &:active { opacity: 0.85; }
     &:disabled { opacity: 0.4; cursor: default; }
+  }
+
+  &__log-hint {
+    margin-top: var(--space-2);
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
   }
 
   &__success {

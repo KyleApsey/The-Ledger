@@ -1,7 +1,7 @@
 {
   "name": "the-ledger",
   "description": "Bar prep management for Belle's Lounge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "author": "Kyle Apsey",
   "license": "MIT",

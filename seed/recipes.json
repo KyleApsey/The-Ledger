@@ -1,0 +1,541 @@
+{
+  "recipes": [
+    {
+      "name": "Simple Syrup",
+      "base_yield_liters": 3,
+      "ingredients": [
+        { "name": "white/cane sugar", "quantity": 1.5, "unit": "kg" },
+        { "name": "water",            "quantity": 1.5, "unit": "L"  }
+      ],
+      "steps": [
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Brown Sugar Simple Syrup",
+      "base_yield_liters": 4,
+      "ingredients": [
+        { "name": "brown sugar", "quantity": 4,   "unit": "lbs" },
+        { "name": "water",       "quantity": 2.5, "unit": "L"   }
+      ],
+      "steps": [
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Ginger Simple Syrup",
+      "base_yield_liters": 4,
+      "notes": "Ratio 1:1:2 (Ginger juice:Water:Sugar)",
+      "ingredients": [
+        { "name": "ginger juice",    "quantity": 1, "unit": "L"  },
+        { "name": "water",           "quantity": 1, "unit": "L"  },
+        { "name": "white/cane sugar","quantity": 2, "unit": "kg" }
+      ],
+      "steps": [
+        "Using centrifugal juicer, extract juice from ginger.",
+        "Squeeze pulp with hand juice press.",
+        "Combine ginger juice, water, and sugar in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Basil Simple Syrup",
+      "base_yield_liters": 4,
+      "notes": "Ratio 1:1 (Sugar:Water)",
+      "ingredients": [
+        { "name": "fresh basil leaves", "quantity": 10, "unit": "oz" },
+        { "name": "water",              "quantity": 2,  "unit": "L"  },
+        { "name": "white/cane sugar",   "quantity": 2,  "unit": "kg" }
+      ],
+      "steps": [
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Add basil leaves.",
+        "Return to a boil.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Mint Simple Syrup",
+      "base_yield_liters": 4,
+      "notes": "Ratio 1:1 (Sugar:Water)",
+      "ingredients": [
+        { "name": "fresh mint leaves", "quantity": 15, "unit": "oz" },
+        { "name": "water",             "quantity": 2,  "unit": "L"  },
+        { "name": "white/cane sugar",  "quantity": 2,  "unit": "kg" }
+      ],
+      "steps": [
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Add mint leaves.",
+        "Return to a boil.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Honey Simple Syrup",
+      "base_yield_liters": 2.5,
+      "notes": "Ratio 3:2 (Honey:Water)",
+      "ingredients": [
+        { "name": "honey", "quantity": 90, "unit": "oz" },
+        { "name": "water", "quantity": 1,  "unit": "L"  }
+      ],
+      "steps": [
+        "Combine honey and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure honey is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Lavender Simple Syrup",
+      "base_yield_liters": 2,
+      "notes": "Ratio 1:1 (Sugar:Water). Seasonal.",
+      "ingredients": [
+        { "name": "lavender",        "quantity": 1.2, "unit": "oz" },
+        { "name": "water",           "quantity": 1,   "unit": "L"  },
+        { "name": "white/cane sugar","quantity": 1,   "unit": "kg" }
+      ],
+      "steps": [
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Add lavender.",
+        "Return to a boil.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Lapsang Souchong Infused Sweet Vermouth",
+      "base_yield_liters": 2,
+      "notes": "Seasonal.",
+      "ingredients": [
+        { "name": "Cocchi Di Torino sweet vermouth", "quantity": 3,  "unit": "bottles" },
+        { "name": "Lapsang Souchong tea leaves",     "quantity": 2,  "unit": "oz"      }
+      ],
+      "steps": [
+        "Combine sweet vermouth and tea leaves in container.",
+        "Shake to combine.",
+        "Store for at least 3 hours."
+      ]
+    },
+    {
+      "name": "Lapsang Souchong Infused Rye",
+      "base_yield_liters": 3,
+      "ingredients": [
+        { "name": "Mayor Pingree (orange label) rye", "quantity": 3, "unit": "bottles" },
+        { "name": "Lapsang Souchong tea leaves",      "quantity": 2, "unit": "oz"      }
+      ],
+      "steps": [
+        "Combine rye and tea leaves in container.",
+        "Shake to combine.",
+        "Store for at least 3 hours."
+      ]
+    },
+    {
+      "name": "Maple Simple Syrup",
+      "base_yield_liters": 2,
+      "notes": "Ratio 3:1 (Maple syrup:Water)",
+      "ingredients": [
+        { "name": "maple syrup", "quantity": 1.5, "unit": "L"  },
+        { "name": "water",       "quantity": 500, "unit": "ml" }
+      ],
+      "steps": [
+        "Combine maple syrup and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure maple syrup is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Peanut Infused Whiskey",
+      "base_yield_liters": 6,
+      "notes": "Seasonal / specialty.",
+      "ingredients": [
+        { "name": "blanched unsalted peanuts",             "quantity": 4, "unit": "lbs" },
+        { "name": "Mayor Pingree (red label) bourbon", "quantity": 6, "unit": "L"   }
+      ],
+      "steps": [
+        "Combine peanuts and bourbon in container.",
+        "Stir to combine.",
+        "Store for 5–7 days."
+      ]
+    },
+    {
+      "name": "Beet Rosemary Syrup",
+      "base_yield_liters": 3.5,
+      "notes": "Seasonal.",
+      "ingredients": [
+        { "name": "fresh beet juice",   "quantity": 1250, "unit": "ml" },
+        { "name": "water",              "quantity": 1150, "unit": "ml" },
+        { "name": "white/cane sugar",   "quantity": 1.5,  "unit": "kg" },
+        { "name": "fresh rosemary",     "quantity": 8,    "unit": "oz" }
+      ],
+      "steps": [
+        "Use centrifugal juicer to extract juice from beets.",
+        "Strain beet juice with a fine mesh strainer and set aside.",
+        "Combine sugar and water in a stock pot.",
+        "Bring to a boil.",
+        "Stir to ensure sugar is dissolved.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Pour in beet juice.",
+        "Add rosemary and strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Cherry Vodka",
+      "base_yield_liters": 0.75,
+      "notes": "Ratio 1:2 (Maraschino cherry brine:Vodka). Seasonal.",
+      "ingredients": [
+        { "name": "maraschino cherry brine", "quantity": 250, "unit": "ml" },
+        { "name": "vodka",                   "quantity": 500, "unit": "ml" }
+      ],
+      "steps": [
+        "Combine maraschino cherry brine and vodka into empty bottle.",
+        "Shake to combine.",
+        "Add pour spout or cap and place in refrigerator."
+      ]
+    },
+    {
+      "name": "Strawberry Gin Infusion",
+      "base_yield_liters": 5,
+      "notes": "Seasonal.",
+      "ingredients": [
+        { "name": "fresh strawberries", "quantity": 5,   "unit": "pints" },
+        { "name": "Liberator gin",      "quantity": 7.5, "unit": "L"     }
+      ],
+      "steps": [
+        "Cut leaves and tops off strawberries, and discard.",
+        "Combine strawberries and gin in a large container.",
+        "Stir to combine.",
+        "Store for at least 3 days."
+      ]
+    },
+    {
+      "name": "Cucumber Vodka Infusion",
+      "base_yield_liters": 5,
+      "ingredients": [
+        { "name": "cucumbers", "quantity": 2, "unit": "whole" },
+        { "name": "vodka",     "quantity": 5, "unit": "L"     }
+      ],
+      "steps": [
+        "Peel and cut cucumbers into 1in quarter moons.",
+        "Combine cucumbers and vodka in a large container.",
+        "Stir to combine.",
+        "Store for at least 3 days."
+      ]
+    },
+    {
+      "name": "Tre Pepper Vodka Infusion",
+      "base_yield_liters": 5,
+      "ingredients": [
+        { "name": "habanero peppers",  "quantity": 2,  "unit": "whole" },
+        { "name": "hungarian peppers", "quantity": 2,  "unit": "whole" },
+        { "name": "sweet peppers",     "quantity": 20, "unit": "whole" },
+        { "name": "vodka",             "quantity": 5,  "unit": "L"     }
+      ],
+      "steps": [
+        "Cut in half and deseed all peppers.",
+        "Combine peppers and vodka in a large container.",
+        "Stir to combine.",
+        "Store for at least 3 days."
+      ]
+    },
+    {
+      "name": "Bloody Mary Mix",
+      "base_yield_liters": 3.5,
+      "ingredients": [
+        { "name": "tomato juice",      "quantity": 64,  "unit": "oz"        },
+        { "name": "pickle brine",      "quantity": 4,   "unit": "oz"        },
+        { "name": "worcestershire sauce","quantity": 4, "unit": "oz"        },
+        { "name": "lemon juice",       "quantity": 4,   "unit": "oz"        },
+        { "name": "Valentina hot sauce","quantity": 1.5,"unit": "oz"        },
+        { "name": "garlic salt",       "quantity": 2,   "unit": "tablespoons"},
+        { "name": "celery salt",       "quantity": 1.5, "unit": "tablespoons"},
+        { "name": "coarse black pepper","quantity": 1.5,"unit": "tablespoons"}
+      ],
+      "steps": [
+        "Combine all ingredients in a large container.",
+        "Shake to combine."
+      ]
+    },
+    {
+      "name": "Coffee Liqueur",
+      "base_yield_liters": 0.875,
+      "ingredients": [
+        { "name": "brown sugar simple syrup", "quantity": 250, "unit": "ml"         },
+        { "name": "cold brew",                "quantity": 250, "unit": "ml"         },
+        { "name": "vodka",                    "quantity": 250, "unit": "ml"         },
+        { "name": "vanilla simple syrup",     "quantity": 125, "unit": "ml"         },
+        { "name": "instant espresso",         "quantity": 3,   "unit": "tablespoons"}
+      ],
+      "steps": [
+        "Combine all ingredients in a large container.",
+        "Shake well to combine."
+      ]
+    },
+    {
+      "name": "Grenadine",
+      "base_yield_liters": 1.5,
+      "ingredients": [
+        { "name": "pomegranate juice",    "quantity": 32,  "unit": "oz"  },
+        { "name": "white/cane sugar",     "quantity": 4,   "unit": "cups"},
+        { "name": "pomegranate molasses", "quantity": 4,   "unit": "oz"  },
+        { "name": "vodka",                "quantity": 1.5, "unit": "oz"  }
+      ],
+      "steps": [
+        "Combine pomegranate juice, sugar, and pomegranate molasses in a large container.",
+        "Shake well to combine.",
+        "Add vodka.",
+        "Shake once more."
+      ]
+    },
+    {
+      "name": "Bourbon Creme",
+      "base_yield_liters": 1,
+      "ingredients": [
+        { "name": "sweetened condensed milk",                  "quantity": 14,  "unit": "oz"         },
+        { "name": "Mayor Pingree (red label) bourbon",     "quantity": 1.5, "unit": "cups"       },
+        { "name": "half and half",                            "quantity": 1,   "unit": "cups"       },
+        { "name": "chocolate syrup",                          "quantity": 2,   "unit": "tablespoons"},
+        { "name": "instant espresso",                         "quantity": 1,   "unit": "teaspoon"   },
+        { "name": "vanilla extract",                          "quantity": 1,   "unit": "teaspoon"   }
+      ],
+      "steps": [
+        "Combine all ingredients in a container.",
+        "Shake well to combine."
+      ]
+    },
+    {
+      "name": "Spicy Pickles",
+      "base_yield_liters": 20,
+      "notes": "Large batch. Seasonal / specialty.",
+      "ingredients": [
+        { "name": "pickles",              "quantity": 1,  "unit": "5-gallon bucket" },
+        { "name": "dried birdseye chilis","quantity": 75, "unit": "g"              },
+        { "name": "Sichuan peppercorns",  "quantity": 7,  "unit": "g"              },
+        { "name": "habanero peppers",     "quantity": 14, "unit": "whole"          },
+        { "name": "dried chipotle peppers","quantity": 2, "unit": "whole"          }
+      ],
+      "steps": [
+        "Combine dried birdseye chilis, Sichuan peppercorns, and chipotle peppers in a very large container.",
+        "Cut habanero peppers in half and add to the container.",
+        "Cut pickles into spears (halved lengthwise) and add to the container.",
+        "Pour pickle brine into container.",
+        "Gently stir to combine.",
+        "Store in the refrigerator for at least 3 days."
+      ]
+    },
+    {
+      "name": "Blueberry Compote",
+      "base_yield_liters": 0.75,
+      "notes": "Seasonal.",
+      "ingredients": [
+        { "name": "blueberries",    "quantity": 456, "unit": "g"  },
+        { "name": "water",          "quantity": 236, "unit": "ml" },
+        { "name": "vanilla extract","quantity": 150, "unit": "ml" },
+        { "name": "sugar",          "quantity": 320, "unit": "g"  },
+        { "name": "lemons",         "quantity": 2,   "unit": "whole"}
+      ],
+      "steps": [
+        "Combine blueberries, water, vanilla extract, and sugar in a stockpot.",
+        "Bring to a boil.",
+        "Add zest of lemons and simmer for 10 minutes.",
+        "Let cool for 30 minutes.",
+        "Pour into container."
+      ]
+    },
+    {
+      "name": "Strawberry Vanilla Simple Syrup",
+      "base_yield_liters": 3,
+      "notes": "Ratio 1:1 (Water:Sugar)",
+      "ingredients": [
+        { "name": "fresh strawberries", "quantity": 3,   "unit": "lbs" },
+        { "name": "white/cane sugar",   "quantity": 1.5, "unit": "L"   },
+        { "name": "water",              "quantity": 1.5, "unit": "L"   },
+        { "name": "vanilla extract",    "quantity": 250, "unit": "ml"  }
+      ],
+      "steps": [
+        "Combine strawberries, water, sugar, and vanilla extract in a stockpot.",
+        "Bring to a boil.",
+        "Simmer for 10 minutes.",
+        "Let cool for 30 minutes.",
+        "Strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Pistachio Orgeat",
+      "base_yield_liters": 4,
+      "notes": "Ratio 1:1 (Water:Sugar)",
+      "ingredients": [
+        { "name": "pistachios",       "quantity": 200, "unit": "g"  },
+        { "name": "white/cane sugar", "quantity": 2,   "unit": "kg" },
+        { "name": "water",            "quantity": 2,   "unit": "L"  }
+      ],
+      "steps": [
+        "Use blade grinder to grind pistachios into a powder.",
+        "Combine water, ground pistachio, and sugar in a stockpot.",
+        "Bring to a boil.",
+        "Simmer for 10 minutes.",
+        "Let cool for 30 minutes.",
+        "Strain into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Vanilla Simple Syrup",
+      "base_yield_liters": 4,
+      "notes": "Ratio 1:1 (Water:Sugar)",
+      "ingredients": [
+        { "name": "white/cane sugar", "quantity": 2,   "unit": "kg" },
+        { "name": "water",            "quantity": 2,   "unit": "L"  },
+        { "name": "vanilla extract",  "quantity": 250, "unit": "ml" }
+      ],
+      "steps": [
+        "Combine sugar, water, and vanilla extract in a stockpot.",
+        "Bring to a boil.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Raspberry Simple Syrup",
+      "base_yield_liters": 2.5,
+      "notes": "Ratio 1:1:1 (Water:Sugar:Raspberry Puree)",
+      "ingredients": [
+        { "name": "white/cane sugar",  "quantity": 850, "unit": "g"  },
+        { "name": "water",             "quantity": 850, "unit": "ml" },
+        { "name": "raspberry puree",   "quantity": 850, "unit": "ml" }
+      ],
+      "steps": [
+        "Combine sugar, water, and raspberry puree in a stockpot.",
+        "Bring to a boil.",
+        "Simmer for 10 minutes.",
+        "Let cool for 30 minutes.",
+        "Pour into container.",
+        "Add 1.5oz vodka for preservation."
+      ]
+    },
+    {
+      "name": "Hot Buttered Rum",
+      "base_yield_liters": 1,
+      "notes": "Seasonal. Rest 24 hours before serving.",
+      "ingredients": [
+        { "name": "unsalted butter",  "quantity": 1,   "unit": "lbs"      },
+        { "name": "brown sugar",      "quantity": 2,   "unit": "cups"     },
+        { "name": "cinnamon",         "quantity": 1,   "unit": "teaspoon" },
+        { "name": "nutmeg",           "quantity": 0.5, "unit": "teaspoon" },
+        { "name": "allspice",         "quantity": 0.5, "unit": "teaspoon" },
+        { "name": "rum",              "quantity": 750, "unit": "ml"       }
+      ],
+      "steps": [
+        "Melt butter.",
+        "While hot, combine brown sugar, cinnamon, nutmeg, and allspice with the butter.",
+        "Pour in 750ml rum and whisk to combine.",
+        "Cover and let rest for 24 hours.",
+        "After 24 hours, skim off solidified fat.",
+        "Strain into bottle."
+      ]
+    },
+    {
+      "name": "Bubblegum Simple Syrup",
+      "base_yield_liters": 2.5,
+      "ingredients": [
+        { "name": "water",           "quantity": 2,  "unit": "L"     },
+        { "name": "white/cane sugar","quantity": 6,  "unit": "cups"  },
+        { "name": "bubblegum",       "quantity": 50, "unit": "pieces"}
+      ],
+      "steps": [
+        "Place bubblegum in cheesecloth and tie closed.",
+        "Combine all ingredients in stock pot.",
+        "Bring to a boil.",
+        "Simmer for 30 minutes.",
+        "Let cool for 30 minutes.",
+        "Strain into container."
+      ]
+    },
+    {
+      "name": "Mint Tea",
+      "base_yield_liters": 2,
+      "ingredients": [
+        { "name": "water",          "quantity": 2, "unit": "L"    },
+        { "name": "mint tea leaves","quantity": 1, "unit": "cups" }
+      ],
+      "steps": [
+        "Bring water to a boil in stock pot.",
+        "Add mint tea leaves to water.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Strain into container."
+      ]
+    },
+    {
+      "name": "Passion Fruit Tea",
+      "base_yield_liters": 2,
+      "ingredients": [
+        { "name": "water",                    "quantity": 2, "unit": "L"    },
+        { "name": "dried passion fruit tea mix","quantity": 1,"unit": "cups"}
+      ],
+      "steps": [
+        "Bring water to a boil in stock pot.",
+        "Add passion fruit tea mix to water.",
+        "Turn off heat.",
+        "Let cool for 30 minutes.",
+        "Strain into container."
+      ]
+    },
+    {
+      "name": "Orange Oleo",
+      "base_yield_liters": 0.25,
+      "notes": "Oleo saccharum — citrus oil expressed into sugar. Small yield.",
+      "ingredients": [
+        { "name": "oranges", "quantity": 4,   "unit": "whole" },
+        { "name": "sugar",   "quantity": 250, "unit": "g"     }
+      ],
+      "steps": [
+        "Peel oranges.",
+        "Combine sugar and orange peels in a mason jar.",
+        "Shake vigorously.",
+        "Store in refrigerator for at least 24 hours."
+      ]
+    }
+  ]
+}

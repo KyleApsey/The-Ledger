@@ -1,12 +1,35 @@
 {
-  "name": "The Ledger – Belle's Lounge recipe book",
-  "description": "A collection of prep ingredient recipes and par tracking",
+  "name": "the-ledger",
+  "description": "Bar prep management for Belle's Lounge",
   "version": "0.1.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "changelog": "git-cliff --bump --unreleased --prepend CHANGELOG.md --sort newest"
-  },
+  "private": true,
   "author": "Kyle Apsey",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "seed:dry-run": "node scripts/validate-seed.mjs",
+    "seed": "node scripts/run-seed.mjs",
+    "changelog": "git-cliff --bump --unreleased --prepend CHANGELOG.md --sort newest",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.0"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^3.2.4",
+    "@nuxt/test-utils": "^3.13.0",
+    "@playwright/test": "^1.46.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@vite-pwa/nuxt": "^0.10.0",
+    "nuxt": "^3.13.0",
+    "sass": "^1.77.0",
+    "vitest": "^3.2.0"
+  }
 }

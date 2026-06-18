@@ -1,6 +1,30 @@
 references/
 .idea/
+
+# Nuxt / build
+.nuxt/
+.output/
+dist/
+node_modules/
+
+# Environment — never commit secrets
+.env
+.env.*
+!.env.example
+
+# Local Supabase
+supabase/.branches/
+supabase/.temp/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Source files kept local only
 CLAUDE.md
 DESIGN.md
 TODOS.md
 RAW_RECIPES.md
+RAW_PARS.md

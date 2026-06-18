@@ -101,7 +101,7 @@ export default {
     <header class="checklist-page__header">
       <div>
         <h1 class="checklist-page__title">Today's Prep</h1>
-        <p v-if="staffName" class="checklist-page__who">{{ staffName }}</p>
+        <ClientOnly><p v-if="staffName" class="checklist-page__who">{{ staffName }}</p></ClientOnly>
       </div>
       <button class="checklist-page__refresh" :disabled="loading" aria-label="Refresh" @click="load">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

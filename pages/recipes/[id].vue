@@ -232,7 +232,7 @@ export default {
       <div v-if="wasteLogged" class="recipe-page__success">Waste logged. Heading back…</div>
 
       <!-- Batch logged success + options -->
-      <template v-else-if="logSuccess">
+      <template v-else-if="logSuccess && !showWasteDrawer">
         <div class="recipe-page__success">Batch logged!</div>
         <div class="recipe-page__post-log">
           <button v-if="itemId" class="recipe-page__waste-link" @click="showWasteDrawer = true">
